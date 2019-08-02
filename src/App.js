@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { updateUser, apiRequest } from "./actions/user-actions";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    setTimeout(() => {}, this.props.onApiRequest());
+  }
+
+  onUpdateUser = event => {
+    this.props.onUpdateUser(event.target.value);
+  };
+
+  render() {
+    console.log(this.props);
+    return (
+      <div className="App">
+        {/* <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.js</code> and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header> */}
+        <input onChange={this.onUpdateUser} />
+        {this.props.user}
+      </div>
+    );
+  }
 }
+const mapStateToProps = (state, props) => ({
+  products: state.products,
+  user: state.user,
+  uesrPlusProp: `${state.user} ${props.aRandomProps}`
+});
 
-export default App;
+const mapActionsToProps = {
+  onUpdateUser: updateUser,
+  onApiRequest: apiRequest
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(App);
